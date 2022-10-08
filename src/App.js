@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import sic from "./utils/SIC.json";
 
-const CONTRACT_ADDRESS = "0x4383D71A2E3d314C91e2cB8aFEe997Cf72c043e4";
+const CONTRACT_ADDRESS = "0x349E832e461309c00a2432E258403C2b6Aa1C47D";
 
 const App = () => {
     const [currentAccount, setCurrentAccount] = useState("");
@@ -13,6 +13,7 @@ const App = () => {
     const [mintTokenContent, setMintTokenContent] = useState("token content...");
     const [transferTokenSign, setTransferTokenSign] = useState("token signature...");
     const [transferContract, setTransferContract] = useState("destintation contract...");
+    const [contract, setContract] = useState(CONTRACT_ADDRESS);
 
     const checkIfWalletIsConnected = async () => {
         const { ethereum } = window;
@@ -65,7 +66,7 @@ const App = () => {
                 // Same stuff again
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
-                const connectedContract = new ethers.Contract(CONTRACT_ADDRESS, sic.abi, signer);
+                const connectedContract = new ethers.Contract(contract, sic.abi, signer);
                 const sigs = await connectedContract.getSignatures();
                 console.log(`All minted: `, sigs);
                 const values = [];
@@ -89,7 +90,7 @@ const App = () => {
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
-                const connectedContract = new ethers.Contract(CONTRACT_ADDRESS, sic.abi, signer);
+                const connectedContract = new ethers.Contract(contract, sic.abi, signer);
 
                 console.log("Going to pop wallet now to pay gas...");
                 const sig = ethers.utils.formatBytes32String(mintTokenSign);
@@ -123,7 +124,7 @@ const App = () => {
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
-                const connectedContract = new ethers.Contract(CONTRACT_ADDRESS, sic.abi, signer);
+                const connectedContract = new ethers.Contract(contract, sic.abi, signer);
 
                 console.log("Going to pop wallet now to pay gas...");
                 const sig = ethers.utils.formatBytes32String(transferTokenSign);
@@ -198,7 +199,7 @@ const App = () => {
 
     const renderMinted = () => (
       <div>
-        {signatures.map((sig, i)=><div key="{sig}">{ethers.utils.parseBytes32String(sig)} : {tokens[i]}</div>)}
+        {signatures.map((sig, i)=><div key="{sig}" className="token">{ethers.utils.parseBytes32String(sig)} : {tokens[i]}</div>)}
       </div>
     );
 
@@ -206,7 +207,7 @@ const App = () => {
         <div className="App">
             <div className="container">
                 <div className="header-container">
-                    <p className="header gradient-text">My NFT Collection</p>
+                    <p className="header gradient-text">SIGN</p>
                     <p className="sub-text">Each unique. Each beautiful. Discover your NFT today.</p>
                     {currentAccount === "" ? renderNotConnectedContainer() : renderMintUI()}
                   {currentAccount === "" || renderMinted()}
