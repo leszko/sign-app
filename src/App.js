@@ -153,13 +153,28 @@ const App = () => {
 
     useEffect(() => {
         checkIfWalletIsConnected();
-    }, []);
+
+        const interval = setInterval(() => {
+            setupEventListener();
+          }, 10000);
+          return () => clearInterval(interval);
+    }, [contract]);
 
     const renderNotConnectedContainer = () => (
         <button onClick={connectWallet} className="cta-button connect-wallet-button">
             Connect to Wallet
         </button>
     );
+
+    const renderContract = () => (
+        <div>
+          <input
+              type="text"
+              placeholder={contract}
+              onChange={(e) => setContract(e.target.value)}
+          ></input>
+        </div>
+      );
 
     const renderMintUI = () => (
       <div>
@@ -208,6 +223,7 @@ const App = () => {
             <div className="container">
                 <div className="header-container">
                     <p className="header gradient-text">SIGN</p>
+                    {renderContract()}
                     <p className="sub-text">Each unique. Each beautiful. Discover your NFT today.</p>
                     {currentAccount === "" ? renderNotConnectedContainer() : renderMintUI()}
                   {currentAccount === "" || renderMinted()}
