@@ -260,7 +260,7 @@ const App = () => {
     const renderMinted = () => (
       <div className="column middle">
         <h2 style={{color:"#0000FF"}}>MY FCSs</h2>
-        {signatures.map((sig, i)=><div key="{sig}" className="token2">{ethers.utils.parseBytes32String(sig)} : {tokens[i]}<hr></hr></div>)}
+        {signatures.map((sig, i)=><div key="{sig}" className="token">{ethers.utils.parseBytes32String(sig)} : {tokens[i]}<hr></hr></div>)}
       </div>
     );
 
