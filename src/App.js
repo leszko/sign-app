@@ -1,9 +1,13 @@
 import "./styles/App.css";
-import { ethers } from "ethers";
+import { ethers, Contract } from "ethers";
 import React, { useEffect, useState } from "react";
 import sic from "./utils/SIC.json";
+import BadgesABI from "./utils/BadgesABI.json"; // Link at the end of the tutorial
+import { Badges } from "./utils/BadgesType.ts"; // Link at the end of the tutorial
 
 const CONTRACT_ADDRESS = "0x349E832e461309c00a2432E258403C2b6Aa1C47D";
+const SISMO_BADGES_CONTRACT = "0xE06B14D5835925e1642d7216F4563a1273509F10"
+const EthereumPowerUserTokenId = 10000005;
 
 const App = () => {
     const [currentAccount, setCurrentAccount] = useState("");
@@ -14,6 +18,7 @@ const App = () => {
     const [transferTokenSign, setTransferTokenSign] = useState("token signature...");
     const [transferContract, setTransferContract] = useState("destintation contract...");
     const [contract, setContract] = useState(CONTRACT_ADDRESS);
+    const [sismo, setSismo] = useState(false);
 
     const checkIfWalletIsConnected = async () => {
         const { ethereum } = window;
@@ -129,7 +134,7 @@ const App = () => {
                 console.log("Going to pop wallet now to pay gas...");
                 const sig = ethers.utils.formatBytes32String(transferTokenSign);
                 var destContract = transferContract;
-                if (!destContract.startWith("0x")) {
+                if (!destContract.startsWith("0x")) {
                     // Resolve ENS test field 'sic'
                     console.log("Finding the contract using ENS")
                     const resolver = await provider.getResolver(destContract);
@@ -137,12 +142,29 @@ const App = () => {
                     destContract = sic;
                     console.log("Contract found in ENS: ", destContract);
                 }
+                if (sismo) {
+                    console.log("Checking SISMO...");
+                    // Check if user is sismo Ehtereum Power User Badge Owner
+                    const badgesContract = new Contract(
+                        SISMO_BADGES_CONTRACT, 
+                        BadgesABI, 
+                        provider 
+                    );
+                    const addr = await provider.getSigner().getAddress();
+                    const balance = await badgesContract.balanceOf(addr, EthereumPowerUserTokenId);
+                    // check if user has the badge
+                    if (balance.gt(0)) { 
+                        console.log("You have the Ethereum Power User badge, well done!")
+                    } else { 
+                        console.log("You don't have the Ethereum Power User badge.") 
+                        return;
+                    }
+                }
                 let nftTxn = await connectedContract.transfer(sig, destContract);
 
                 console.log("Transfering...please wait.");
                 await nftTxn.wait();
                 console.log(nftTxn);
-                console.log(`Transfered, see transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`);
                 const sigs = await connectedContract.getSignatures();
                 console.log(`All minted: `, sigs);
                 const values = [];
@@ -226,6 +248,16 @@ const App = () => {
       </div>
     );
 
+    const renderSismoToggle = () => (
+        <div>
+        <input
+        type="checkbox"
+        onChange={(e) => setSismo(e.target.checked)}
+        ></input>
+        <div className="token">Transfer to only when Sismo Ethereum Power User Badge Holder</div>
+        </div>
+    )
+
     return (
         <div className="App">
             <div className="container">
@@ -236,6 +268,7 @@ const App = () => {
                     {currentAccount === "" ? renderNotConnectedContainer() : renderMintUI()}
                   {currentAccount === "" || renderMinted()}
                   {currentAccount === "" || renderTransferUI()}
+                  {currentAccount === "" || renderSismoToggle()}
                 </div>
                 
             </div>
