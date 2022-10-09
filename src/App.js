@@ -199,6 +199,7 @@ const App = () => {
     const renderContract = () => (
         <div>
           <input
+              style={{width:"320px"}}
               type="text"
               placeholder={contract}
               onChange={(e) => setContract(e.target.value)}
@@ -207,44 +208,59 @@ const App = () => {
       );
 
     const renderMintUI = () => (
-      <div>
-        <input
+      <div className="column left">
+        <h2 style={{color:"#00FF00"}}>MINT HERE</h2>
+        <div>
+        <label style={{color:"white"}} >PCS_id (aka sign)
+        <input style={{marginTop:"10px"}}
             type="text"
             placeholder={mintTokenSign}
             onChange={(e) => setMintTokenSign(e.target.value)}
-        ></input>
-        <input
+        ></input></label>
+        </div>
+        <div style={{}}>
+        <label style={{color:"white",marginLeft: "-14px"}} >_pointer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input style={{marginTop:"10px"}}
             type="text"
             placeholder={mintTokenContent}
             onChange={(e) => setMintTokenContent(e.target.value)}
-        ></input>
-        <button onClick={askContractToMintNft} className="cta-button connect-wallet-button">
+        ></input></label>
+        </div>
+        <button style={{marginTop:"10px"}} onClick={askContractToMintNft} className="cta-button connect-wallet-button">
             Mint NFT
         </button>
         </div>
     );
 
   const renderTransferUI = () => (
-      <div>
-        <input
+      <div className="column right">
+        <h2 style={{color:"#FFD700"}}>TRANSFER</h2>
+        <div style={{marginLeft:"0px"}}>
+        <label style={{color:"white"}} >PCS_id (aka sign)
+        <input style={{marginTop:"10px"}}
             type="text"
             placeholder={transferTokenSign}
             onChange={(e) => setTransferTokenSign(e.target.value)}
-        ></input>
+        ></input></label>
+        </div>
+        <div style={{marginLeft:"0px"}}>
+        <label style={{color:"white"}} >ENS or SIC Address 
         <input
             type="text"
             placeholder={transferContract}
             onChange={(e) => setTransferContract(e.target.value)}
-        ></input>
-        <button onClick={askContractToTransferNft} className="cta-button connect-wallet-button">
+       ></input></label>
+        </div>
+        <button style={{marginTop:"10px"}} onClick={askContractToTransferNft} className="cta-button connect-wallet-button">
             Transfer NFT
         </button>
         </div>
     );
 
     const renderMinted = () => (
-      <div>
-        {signatures.map((sig, i)=><div key="{sig}" className="token">{ethers.utils.parseBytes32String(sig)} : {tokens[i]}</div>)}
+      <div className="column middle">
+        <h2 style={{color:"#0000FF"}}>MY FCSs</h2>
+        {signatures.map((sig, i)=><div key="{sig}" className="token2">{ethers.utils.parseBytes32String(sig)} : {tokens[i]}<hr></hr></div>)}
       </div>
     );
 
@@ -263,12 +279,15 @@ const App = () => {
             <div className="container">
                 <div className="header-container">
                     <p className="header gradient-text">SIGN</p>
+                    <p className="sub-text">Your current vault (SIC) is:</p>
                     {renderContract()}
-                    <p className="sub-text">Each unique. Each beautiful. Discover your NFT today.</p>
+                    <p className="sub-text">MY CONTENT = MY CONTRACT = MY IDENTITY = MY DECISIONS!</p>
                     {currentAccount === "" ? renderNotConnectedContainer() : renderMintUI()}
                   {currentAccount === "" || renderMinted()}
                   {currentAccount === "" || renderTransferUI()}
+                  <div className="center">
                   {currentAccount === "" || renderSismoToggle()}
+                  </div>
                 </div>
                 
             </div>

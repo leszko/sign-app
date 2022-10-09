@@ -82,9 +82,44 @@
     padding-bottom: 30px;
   }
   
-  .twitter-logo {
-    width: 35px;
-    height: 35px;
+  .column {
+    float: left;
+    padding: 10px;
+    height: 300px; /* Should be removed. Only for demonstration */
+    margin: 15px;
+  }
+  
+  .left {
+    width: 27%;
+    border: 1px solid #00FF00;
+  }
+  
+  .right {
+    width: 27%;
+    border: 1px solid #FFD700;
+  }
+  
+  .middle {
+    width: 27%;
+    border: 1px solid #0000FF;
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  .center {
+    text-align: center;
+  }
+  
+  .center-down {
+  margin: auto;
+  width: 60%;
+  border: 1px solid #FFFFFF;
+  padding: 5px;
   }
   
   .footer-text {
