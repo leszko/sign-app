@@ -128,7 +128,15 @@ const App = () => {
 
                 console.log("Going to pop wallet now to pay gas...");
                 const sig = ethers.utils.formatBytes32String(transferTokenSign);
-                const destContract = transferContract;
+                var destContract = transferContract;
+                if (!destContract.startWith("0x")) {
+                    // Resolve ENS test field 'sic'
+                    console.log("Finding the contract using ENS")
+                    const resolver = await provider.getResolver(destContract);
+                    const sic = await resolver.getText('sic');
+                    destContract = sic;
+                    console.log("Contract found in ENS: ", destContract);
+                }
                 let nftTxn = await connectedContract.transfer(sig, destContract);
 
                 console.log("Transfering...please wait.");
