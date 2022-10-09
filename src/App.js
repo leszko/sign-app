@@ -2,8 +2,8 @@ import "./styles/App.css";
 import { ethers, Contract } from "ethers";
 import React, { useEffect, useState } from "react";
 import sic from "./utils/SIC.json";
-import BadgesABI from "./utils/BadgesABI.json"; // Link at the end of the tutorial
-import { Badges } from "./utils/BadgesType.ts"; // Link at the end of the tutorial
+import BadgesABI from "./utils/BadgesABI.json"; 
+import { Badges } from "./utils/BadgesType.ts";
 
 const CONTRACT_ADDRESS = "0x349E832e461309c00a2432E258403C2b6Aa1C47D";
 const SISMO_BADGES_CONTRACT = "0xE06B14D5835925e1642d7216F4563a1273509F10"
